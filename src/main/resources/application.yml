@@ -1,0 +1,14 @@
+logging:
+  level:
+    root: debug
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+
+external-client:
+  daum:
+    url: 'https://dapi.kakao.com'
+    authorization: 'KakaoAK 8502d649cb53a5b40f0e39fe9f52d24a'

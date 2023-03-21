@@ -1,9 +1,8 @@
-package com.example.blogsearch.adapter.out.client.daum;
+package com.example.blogsearch.adapter.out.client.daum.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Getter
 @Builder
@@ -11,7 +10,5 @@ public class SearchResponseDocumentDto {
     private String title;
     private String contents;
     private String url;
-    private String blogname;
-    private String thumbnail;
-    private LocalDateTime datetime;
+    private OffsetDateTime datetime;
 }

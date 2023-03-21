@@ -1,4 +1,4 @@
-package com.example.blogsearch.adapter.out.client.daum;
+package com.example.blogsearch.adapter.out.client.daum.dto;
 
 import com.example.blogsearch.domain.BlogSearchResult;
 import com.example.blogsearch.domain.BlogSearchResultItem;
@@ -15,6 +15,7 @@ public class SearchResponseDto {
     private SearchResponseMetaDto meta;
     private List<SearchResponseDocumentDto> documents;
 
+    //TODO: change to using MapStruct
     public BlogSearchResult toBlogSearchResult(){
         BlogSearchResultMeta resultMeta = BlogSearchResultMeta.builder()
                 .totalCount(meta.totalCount)
@@ -22,13 +23,11 @@ public class SearchResponseDto {
                 .build();
 
         List<BlogSearchResultItem> dataList = new ArrayList<>();
-        for (SearchResponseDocumentDto item : this.documents) {
+        for (SearchResponseDocumentDto item : getDocuments()) {
             BlogSearchResultItem build = BlogSearchResultItem.builder()
-                    .blogname(item.getBlogname())
                     .title(item.getTitle())
                     .contents(item.getContents())
                     .url(item.getUrl())
-                    .thumbnail(item.getThumbnail())
                     .datetime(item.getDatetime())
                     .build();
             dataList.add(build);

@@ -1,10 +1,10 @@
-package com.example.blogsearch.adapter.out.client.daum;
+package com.example.blogsearch.adapter.out.client.daum.dto;
 
 import com.example.blogsearch.domain.BlogSearchResult;
 import com.example.blogsearch.domain.BlogSearchResultItem;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,12 +21,10 @@ class SearchResponseDtoTest {
                 .build();
 
         SearchResponseDocumentDto searchResponseDocumentDto = SearchResponseDocumentDto.builder()
-                .blogname("blogname test")
                 .title("blog post title")
                 .contents("contents is empty")
                 .url("http://testtest.test.ts")
-                .thumbnail("http://testtest.test.ts/thumnail/1.png")
-                .datetime(LocalDateTime.now())
+                .datetime(OffsetDateTime.now())
                 .build();
 
         SearchResponseDto dto = SearchResponseDto.builder()
@@ -40,10 +38,8 @@ class SearchResponseDtoTest {
         assertEquals(metaDto.getTotalCount(), result.getMeta().getTotalCount());
         assertEquals(metaDto.getPageableCount(), result.getMeta().getPageCount());
         BlogSearchResultItem firstItem = result.getDataList().get(0);
-        assertEquals(searchResponseDocumentDto.getBlogname(), firstItem.getBlogname());
         assertEquals(searchResponseDocumentDto.getTitle(), firstItem.getTitle());
         assertEquals(searchResponseDocumentDto.getContents(), firstItem.getContents());
-        assertEquals(searchResponseDocumentDto.getThumbnail(), firstItem.getThumbnail());
         assertEquals(searchResponseDocumentDto.getUrl(), firstItem.getUrl());
     }
 }

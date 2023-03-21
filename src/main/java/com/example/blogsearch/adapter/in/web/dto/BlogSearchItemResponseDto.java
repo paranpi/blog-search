@@ -1,4 +1,4 @@
-package com.example.blogsearch.domain;
+package com.example.blogsearch.adapter.in.web.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
 
 @Builder
 @Getter
-public class BlogSearchResultItem {
+public class BlogSearchItemResponseDto {
     String title;
     String contents;
     String url;
