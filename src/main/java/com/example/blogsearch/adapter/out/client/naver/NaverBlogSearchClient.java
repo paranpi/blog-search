@@ -1,4 +1,4 @@
-package com.example.blogsearch.adapter.out.client;
+package com.example.blogsearch.adapter.out.client.naver;
 
 import com.example.blogsearch.application.port.out.LoadBlogPort;
 import com.example.blogsearch.domain.BlogSearchResult;

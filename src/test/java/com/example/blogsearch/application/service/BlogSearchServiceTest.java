@@ -1,7 +1,7 @@
 package com.example.blogsearch.application.service;
 
-import com.example.blogsearch.adapter.out.client.DaumBlogSearchClient;
-import com.example.blogsearch.adapter.out.client.NaverBlogSearchClient;
+import com.example.blogsearch.adapter.out.client.daum.DaumBlogSearchClient;
+import com.example.blogsearch.adapter.out.client.naver.NaverBlogSearchClient;
 import com.example.blogsearch.application.port.out.LoadBlogPort;
 import com.example.blogsearch.domain.BlogSearchResult;
 import com.example.blogsearch.domain.BlogSearchResultItem;
@@ -41,7 +41,7 @@ class BlogSearchServiceTest {
                 .datetime(LocalDateTime.parse("2017-05-07T18:50:07.000+09:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME))
                 .build();
         BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).pageCount(1).build();
-        BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).documents(List.of(item)).build();
+        BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).dataList(List.of(item)).build();
         given(daumBlogSearchClient.loadByKeyword("test", 1, 10, "accuracy"))
                 .willReturn(searchResult);
 
@@ -50,8 +50,8 @@ class BlogSearchServiceTest {
 
         //then
         assertNotNull(result);
-        assertNotNull(result.getDocuments());
-        assertTrue(result.getDocuments().size() > 0);
+        assertNotNull(result.getDataList());
+        assertTrue(result.getDataList().size() > 0);
         assertNotNull(result.getMeta());
     }
 
@@ -65,7 +65,7 @@ class BlogSearchServiceTest {
                 .datetime(LocalDateTime.parse("2017-05-07T18:50:07.000+09:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME))
                 .build();
         BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).pageCount(1).build();
-        BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).documents(List.of(item)).build();
+        BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).dataList(List.of(item)).build();
 
         given(daumBlogSearchClient.loadByKeyword("fallback", 1, 10, "accuracy"))
                 .willAnswer(invocation -> {
@@ -75,9 +75,9 @@ class BlogSearchServiceTest {
                 .willReturn(searchResult);
         BlogSearchResult result = blogSearchService.searchBlogPosts("fallback", 1, 10, "accuracy");
         assertNotNull(result);
-        assertNotNull(result.getDocuments());
-        assertTrue(result.getDocuments().size() > 0);
-        assertEquals("정란수의 브런치", result.getDocuments().get(0).getBlogname());
+        assertNotNull(result.getDataList());
+        assertTrue(result.getDataList().size() > 0);
+        assertEquals("정란수의 브런치", result.getDataList().get(0).getBlogname());
         assertNotNull(result.getMeta());
     }
 }

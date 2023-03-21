@@ -9,5 +9,5 @@ import java.util.List;
 @Builder
 public class BlogSearchResult {
     BlogSearchResultMeta meta;
-    List<BlogSearchResultItem> documents;
+    List<BlogSearchResultItem> dataList;
 }
