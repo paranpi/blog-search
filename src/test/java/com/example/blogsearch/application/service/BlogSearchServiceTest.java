@@ -4,10 +4,7 @@ import com.example.blogsearch.adapter.out.client.daum.DaumBlogSearchClient;
 import com.example.blogsearch.adapter.out.client.naver.NaverBlogSearchClient;
 import com.example.blogsearch.application.port.out.LoadBlogPort;
 import com.example.blogsearch.application.port.out.LoadKeywordPort;
-import com.example.blogsearch.domain.BlogSearchKeyword;
-import com.example.blogsearch.domain.BlogSearchResult;
-import com.example.blogsearch.domain.BlogSearchResultItem;
-import com.example.blogsearch.domain.BlogSearchResultMeta;
+import com.example.blogsearch.domain.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,13 +41,13 @@ class BlogSearchServiceTest {
                 .url("https://brunch.co.kr/@tourism/9")
                 .datetime(OffsetDateTime.parse("2017-05-07T18:50:07.000+09:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME))
                 .build();
-        BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).pageCount(1).build();
+        BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).build();
         BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).dataList(List.of(item)).build();
-        given(daumBlogSearchClient.loadByKeyword("test", 1, 10, "accuracy"))
+        given(daumBlogSearchClient.loadByKeyword("test", 1, 10, BlogSearchSortType.ACCURACY))
                 .willReturn(searchResult);
 
         //when
-        BlogSearchResult result = blogSearchService.searchBlogPosts("test", 1, 10, "accuracy");
+        BlogSearchResult result = blogSearchService.searchBlogPosts("test", 1, 10, BlogSearchSortType.ACCURACY);
 
         //then
         assertNotNull(result);
@@ -61,22 +58,26 @@ class BlogSearchServiceTest {
 
     @Test
     void searchBlogPostFallbackTest() {
+        //Given
         BlogSearchResultItem item = BlogSearchResultItem.builder()
                 .title("블로그 포스트의 제목. 제목에서 검색어와 일치하는 부분은 <b> 태그로 감싸져 있습니다.")
                 .contents("블로그 포스트의 내용을 요약한 패시지 정보. 패시지 정보에서 검색어와 일치하는 부분은 <b> 태그로 감싸져 있습니다.")
                 .url("블로그 포스트가 있는 블로그의 주소")
                 .datetime(OffsetDateTime.parse("2017-05-07T18:50:07.000+09:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME))
                 .build();
-        BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).pageCount(1).build();
+        BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).build();
         BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).dataList(List.of(item)).build();
 
-        given(daumBlogSearchClient.loadByKeyword("fallback", 1, 10, "accuracy"))
+        given(daumBlogSearchClient.loadByKeyword("fallback", 1, 10, BlogSearchSortType.ACCURACY))
                 .willAnswer(invocation -> {
                     throw new Exception("502 Bad Gateway");
                 });
-        given(naverBlogSearchClient.loadByKeyword("fallback", 1, 10, "accuracy"))
+        given(naverBlogSearchClient.loadByKeyword("fallback", 1, 10, BlogSearchSortType.ACCURACY))
                 .willReturn(searchResult);
-        BlogSearchResult result = blogSearchService.searchBlogPosts("fallback", 1, 10, "accuracy");
+        //When
+        BlogSearchResult result = blogSearchService.searchBlogPosts("fallback", 1, 10, BlogSearchSortType.ACCURACY);
+
+        //Then
         assertNotNull(result);
         assertNotNull(result.getDataList());
         assertTrue(result.getDataList().size() > 0);
@@ -85,6 +86,7 @@ class BlogSearchServiceTest {
 
     @Test
     void getPopularKeywordsTest() {
+        //Given
         BlogSearchKeyword[] blogSearchKeywords = {
                 BlogSearchKeyword.builder().id(1L).keyword("test4").count(4).build(),
                 BlogSearchKeyword.builder().id(2L).keyword("test3").count(3).build(),
@@ -94,7 +96,10 @@ class BlogSearchServiceTest {
         given(loadKeywordPort.loadKeywordsSortByPopular(10))
                 .willReturn(Arrays.asList(blogSearchKeywords));
 
+        //When
         List<BlogSearchKeyword> blogSearchKeywordList = blogSearchService.getPopularKeywords(10);
+
+        //Then
         assertTrue(blogSearchKeywordList.size() > 0);
         assertEquals("test4", blogSearchKeywordList.get(0).getKeyword());
         assertEquals(4, blogSearchKeywordList.get(0).getCount());

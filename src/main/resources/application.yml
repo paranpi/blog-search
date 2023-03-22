@@ -17,7 +17,8 @@ spring:
 logging:
   level:
     root: info
-    
+    com.example.blogsearch: debug
+
 feign:
   client:
     config:
@@ -28,3 +29,7 @@ external-client:
   daum:
     url: 'https://dapi.kakao.com'
     authorization: 'KakaoAK 8502d649cb53a5b40f0e39fe9f52d24a'
+  naver:
+    url: 'https://openapi.naver.com'
+    client-id: 'FcqOM0eREChjs51tYe3v'
+    client-secret: 'vD3moqYh5y'

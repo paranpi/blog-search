@@ -15,11 +15,9 @@ public class SearchResponseDto {
     private SearchResponseMetaDto meta;
     private List<SearchResponseDocumentDto> documents;
 
-    //TODO: change to using MapStruct
     public BlogSearchResult toBlogSearchResult(){
         BlogSearchResultMeta resultMeta = BlogSearchResultMeta.builder()
-                .totalCount(meta.totalCount)
-                .pageCount(meta.pageableCount)
+                .totalCount(meta.pageableCount)
                 .build();
 
         List<BlogSearchResultItem> dataList = new ArrayList<>();

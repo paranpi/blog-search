@@ -19,7 +19,6 @@ public class BlogSearchResponseDto {
         BlogSearchResultMeta resultMeta = result.getMeta();
         BlogSearchMetaResponseDto meta = BlogSearchMetaResponseDto.builder()
                 .totalCount(resultMeta.getTotalCount())
-                .pageCount(resultMeta.getPageCount())
                 .build();
 
         List<BlogSearchItemResponseDto> dataList = new ArrayList<>();

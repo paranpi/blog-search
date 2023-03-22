@@ -3,14 +3,10 @@ package com.example.blogsearch.adapter.in.web.exception;
 import com.example.blogsearch.adapter.in.web.dto.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.ConstraintViolationException;
 
 @Slf4j
 @RestControllerAdvice
@@ -26,19 +22,24 @@ public class ExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @org.springframework.web.bind.annotation.ExceptionHandler(BindException.class)
-    public ErrorResponseDto constraintViolationExceptionHandler(BindException e) {
-        List<String> errorMessages = new ArrayList<>();
-        BindingResult bindingResult = e.getBindingResult();
-        for(FieldError fieldError: bindingResult.getFieldErrors()) {
-            errorMessages.add(fieldError.getField() + " 은(는) " + fieldError.getDefaultMessage());
-        }
+    @org.springframework.web.bind.annotation.ExceptionHandler(ConstraintViolationException.class)
+    public ErrorResponseDto constraintViolationExceptionHandler(ConstraintViolationException e) {
 
-
-        log.error(String.join(",", errorMessages));
+        log.error(e.getMessage());
         return ErrorResponseDto.builder()
                 .code(ErrorCode.BAD_REQUEST.getCode())
-                .message(String.join(",", errorMessages))
+                .message(e.getMessage())
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @org.springframework.web.bind.annotation.ExceptionHandler(ValidationException.class)
+    public ErrorResponseDto validationExceptionHandler(ValidationException e) {
+
+        log.error(e.getMessage());
+        return ErrorResponseDto.builder()
+                .code(ErrorCode.BAD_REQUEST.getCode())
+                .message(e.getMessage())
                 .build();
     }
 }

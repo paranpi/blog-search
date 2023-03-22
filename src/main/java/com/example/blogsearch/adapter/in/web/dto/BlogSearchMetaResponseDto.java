@@ -7,5 +7,4 @@ import lombok.Getter;
 @Getter
 public class BlogSearchMetaResponseDto {
     Integer totalCount;
-    Integer pageCount;
 }
