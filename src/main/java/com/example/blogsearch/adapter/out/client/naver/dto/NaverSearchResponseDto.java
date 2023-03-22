@@ -36,6 +36,7 @@ public class NaverSearchResponseDto {
                     .title(item.getTitle())
                     .contents(item.getDescription())
                     .url(item.getBloggerlink())
+                    .blogname(item.getBloggername())
                     .datetime(dateTime)
                     .build();
             itemList.add(resultItem);

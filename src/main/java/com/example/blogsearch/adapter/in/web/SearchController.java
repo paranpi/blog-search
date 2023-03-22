@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
 public class SearchController {
     private final BlogSearchService blogSearchService;
     @GetMapping("/search")
-    public BlogSearchResponseDto searchBlogs(@RequestParam String keyword,
+    public BlogSearchResponseDto searchBlogs(@RequestParam @NotEmpty String keyword,
                                              @RequestParam(defaultValue = "1") @Min(1) @Max(50) Integer pageNumber,
                                              @RequestParam(defaultValue = "10") @Min(1) @Max(50) Integer pageSize,
                                              @RequestParam(defaultValue = "ACCURACY") String sortType

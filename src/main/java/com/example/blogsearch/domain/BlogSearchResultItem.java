@@ -11,5 +11,7 @@ public class BlogSearchResultItem {
     String title;
     String contents;
     String url;
+    String blogname;
+    String thumbnail;
     OffsetDateTime datetime;
 }

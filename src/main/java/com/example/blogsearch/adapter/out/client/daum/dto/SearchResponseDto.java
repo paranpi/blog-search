@@ -26,6 +26,8 @@ public class SearchResponseDto {
                     .title(item.getTitle())
                     .contents(item.getContents())
                     .url(item.getUrl())
+                    .blogname(item.getBlogname())
+                    .thumbnail(item.getThumbnail())
                     .datetime(item.getDatetime())
                     .build();
             dataList.add(build);

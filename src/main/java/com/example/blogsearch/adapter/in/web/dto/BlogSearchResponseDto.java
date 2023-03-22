@@ -28,6 +28,8 @@ public class BlogSearchResponseDto {
                     .title(resultItem.getTitle())
                     .contents(resultItem.getContents())
                     .url(resultItem.getUrl())
+                    .blogname(resultItem.getBlogname())
+                    .thumbnail(resultItem.getThumbnail())
                     .datetime(resultItem.getDatetime())
                     .build();
             dataList.add(blogSearchItemResponseDto);
