@@ -19,6 +19,7 @@ public class SearchController {
     private final BlogSearchService blogSearchService;
     @GetMapping("/blog")
     public BlogSearchResponseDto searchBlogs(@Valid BlogSearchRequestDto requestDto) {
+        //TODO: sort type validation 추가
         BlogSearchResult searchResult = blogSearchService.searchBlogPosts(requestDto.getQuery(), requestDto.getPage(), requestDto.getSize(), requestDto.getSort());
         return BlogSearchResponseDto.of(searchResult);
     }

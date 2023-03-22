@@ -6,19 +6,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
-public class CommonExceptionHandler {
+public class ExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     public ErrorResponseDto exceptionHandler(Exception e) {
         log.error(e.getMessage(), e);
         return ErrorResponseDto.builder()
@@ -28,7 +26,7 @@ public class CommonExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BindException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(BindException.class)
     public ErrorResponseDto constraintViolationExceptionHandler(BindException e) {
         List<String> errorMessages = new ArrayList<>();
         BindingResult bindingResult = e.getBindingResult();

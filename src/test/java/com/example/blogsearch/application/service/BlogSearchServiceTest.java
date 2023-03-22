@@ -3,6 +3,8 @@ package com.example.blogsearch.application.service;
 import com.example.blogsearch.adapter.out.client.daum.DaumBlogSearchClient;
 import com.example.blogsearch.adapter.out.client.naver.NaverBlogSearchClient;
 import com.example.blogsearch.application.port.out.LoadBlogPort;
+import com.example.blogsearch.application.port.out.LoadKeywordPort;
+import com.example.blogsearch.domain.BlogSearchKeyword;
 import com.example.blogsearch.domain.BlogSearchResult;
 import com.example.blogsearch.domain.BlogSearchResultItem;
 import com.example.blogsearch.domain.BlogSearchResultMeta;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +31,9 @@ class BlogSearchServiceTest {
 
     @MockBean(classes = NaverBlogSearchClient.class)
     LoadBlogPort naverBlogSearchClient;
+
+    @MockBean
+    LoadKeywordPort loadKeywordPort;
 
     @Test
     void searchBlogPostTest() {
@@ -75,5 +81,24 @@ class BlogSearchServiceTest {
         assertNotNull(result.getDataList());
         assertTrue(result.getDataList().size() > 0);
         assertNotNull(result.getMeta());
+    }
+
+    @Test
+    void getPopularKeywordsTest() {
+        BlogSearchKeyword[] blogSearchKeywords = {
+                new BlogSearchKeyword("test4", 4),
+                new BlogSearchKeyword("test3", 3),
+                new BlogSearchKeyword("test2", 2),
+                new BlogSearchKeyword("test1", 1)
+        };
+        given(loadKeywordPort.loadKeywordsSortByPopular(10))
+                .willReturn(Arrays.asList(blogSearchKeywords));
+
+        List<BlogSearchKeyword> blogSearchKeywordList = blogSearchService.getPopularKeywords(10);
+        assertTrue(blogSearchKeywordList.size() > 0);
+        assertEquals("test4", blogSearchKeywordList.get(0).getKeyword());
+        assertEquals(4, blogSearchKeywordList.get(0).getCount());
+        assertEquals("test3", blogSearchKeywordList.get(1).getKeyword());
+        assertEquals(3, blogSearchKeywordList.get(1).getCount());
     }
 }
