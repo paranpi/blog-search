@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface LoadKeywordPort {
     List<BlogSearchKeyword> loadKeywordsSortByPopular(Integer limit);
+    BlogSearchKeyword loadSearchKeyword(String keyword);
 }

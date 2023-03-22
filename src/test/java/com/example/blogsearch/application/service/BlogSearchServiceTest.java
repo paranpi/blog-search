@@ -86,10 +86,10 @@ class BlogSearchServiceTest {
     @Test
     void getPopularKeywordsTest() {
         BlogSearchKeyword[] blogSearchKeywords = {
-                new BlogSearchKeyword("test4", 4),
-                new BlogSearchKeyword("test3", 3),
-                new BlogSearchKeyword("test2", 2),
-                new BlogSearchKeyword("test1", 1)
+                BlogSearchKeyword.builder().id(1L).keyword("test4").count(4).build(),
+                BlogSearchKeyword.builder().id(2L).keyword("test3").count(3).build(),
+                BlogSearchKeyword.builder().id(3L).keyword("test2").count(2).build(),
+                BlogSearchKeyword.builder().id(4L).keyword("test1").count(1).build(),
         };
         given(loadKeywordPort.loadKeywordsSortByPopular(10))
                 .willReturn(Arrays.asList(blogSearchKeywords));

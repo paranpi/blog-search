@@ -1,19 +1,18 @@
 package com.example.blogsearch.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-@AllArgsConstructor
 public class BlogSearchKeyword {
+    private Long id;
     //TODO: Validate
     private String keyword;
     @Builder.Default
     private Integer count = 0;
 
-    public Integer increaseViewCount() {
+    public Integer increaseSearchCount() {
         return ++count;
     }
 }

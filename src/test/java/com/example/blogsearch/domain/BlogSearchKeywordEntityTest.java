@@ -11,6 +11,6 @@ class BlogSearchKeywordEntityTest {
                 .keyword("Test")
                 .count(1)
                 .build();
-        assertEquals(2, (int) popularKeyword.increaseViewCount());
+        assertEquals(2, (int) popularKeyword.increaseSearchCount());
     }
 }
