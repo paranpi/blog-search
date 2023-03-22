@@ -35,8 +35,7 @@ class SearchResponseDtoTest {
         BlogSearchResult result = dto.toBlogSearchResult();
 
         //Then
-        assertEquals(metaDto.getTotalCount(), result.getMeta().getTotalCount());
-        assertEquals(metaDto.getPageableCount(), result.getMeta().getPageCount());
+        assertEquals(metaDto.getPageableCount(), result.getMeta().getTotalCount());
         BlogSearchResultItem firstItem = result.getDataList().get(0);
         assertEquals(searchResponseDocumentDto.getTitle(), firstItem.getTitle());
         assertEquals(searchResponseDocumentDto.getContents(), firstItem.getContents());

@@ -4,6 +4,7 @@ import com.example.blogsearch.adapter.out.client.daum.DaumBlogSearchClient;
 import com.example.blogsearch.adapter.out.client.naver.NaverBlogSearchClient;
 import com.example.blogsearch.application.port.out.LoadBlogPort;
 import com.example.blogsearch.application.port.out.LoadKeywordPort;
+import com.example.blogsearch.application.port.out.SaveKeywordPort;
 import com.example.blogsearch.domain.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,16 @@ class BlogSearchServiceTest {
     BlogSearchService blogSearchService;
 
     @MockBean(classes = DaumBlogSearchClient.class)
-    LoadBlogPort daumBlogSearchClient;
+    LoadBlogPort blogSearchClient;
 
     @MockBean(classes = NaverBlogSearchClient.class)
-    LoadBlogPort naverBlogSearchClient;
+    LoadBlogPort fallbackBlogSearchClient;
 
     @MockBean
     LoadKeywordPort loadKeywordPort;
+
+    @MockBean
+    SaveKeywordPort saveKeywordPort;
 
     @Test
     void searchBlogPostTest() {
@@ -43,9 +47,10 @@ class BlogSearchServiceTest {
                 .build();
         BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).build();
         BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).dataList(List.of(item)).build();
-        given(daumBlogSearchClient.loadByKeyword("test", 1, 10, BlogSearchSortType.ACCURACY))
+        given(blogSearchClient.loadByKeyword("test", 1, 10, BlogSearchSortType.ACCURACY))
                 .willReturn(searchResult);
 
+        given(loadKeywordPort.loadSearchKeyword("test")).willReturn(BlogSearchKeyword.builder().keyword("test").build());
         //when
         BlogSearchResult result = blogSearchService.searchBlogPosts("test", 1, 10, BlogSearchSortType.ACCURACY);
 
@@ -68,12 +73,13 @@ class BlogSearchServiceTest {
         BlogSearchResultMeta meta = BlogSearchResultMeta.builder().totalCount(1).build();
         BlogSearchResult searchResult = BlogSearchResult.builder().meta(meta).dataList(List.of(item)).build();
 
-        given(daumBlogSearchClient.loadByKeyword("fallback", 1, 10, BlogSearchSortType.ACCURACY))
+        given(blogSearchClient.loadByKeyword("fallback", 1, 10, BlogSearchSortType.ACCURACY))
                 .willAnswer(invocation -> {
                     throw new Exception("502 Bad Gateway");
                 });
-        given(naverBlogSearchClient.loadByKeyword("fallback", 1, 10, BlogSearchSortType.ACCURACY))
+        given(fallbackBlogSearchClient.loadByKeyword("fallback", 1, 10, BlogSearchSortType.ACCURACY))
                 .willReturn(searchResult);
+        given(loadKeywordPort.loadSearchKeyword("fallback")).willReturn(BlogSearchKeyword.builder().keyword("fallback").build());
         //When
         BlogSearchResult result = blogSearchService.searchBlogPosts("fallback", 1, 10, BlogSearchSortType.ACCURACY);
 
