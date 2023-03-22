@@ -21,7 +21,7 @@ public class BlogSearchKeywordRepository implements LoadKeywordPort, SaveKeyword
     private final BlogSearchKeywordJpaRepository blogSearchKeywordJpaRepository;
     @Override
     public List<BlogSearchKeyword> loadKeywordsSortByPopular(Integer limit) {
-        Pageable pageable = PageRequest.of(1, limit, Sort.by("count", "desc"));
+        Pageable pageable = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "count"));
         List<BlogSearchKeywordEntity> blogSearchKeywordEntities = blogSearchKeywordJpaRepository.findAll(pageable).toList();
         //TODO: Mapstruct
         List<BlogSearchKeyword> blogSearchKeywords = new ArrayList<>();

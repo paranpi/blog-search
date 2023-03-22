@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Entity
 @Builder
 @Table(indexes = {
+        @Index(name = "IK_COUNT", columnList = "count"),
         @Index(name = "UK_KEYWORD", columnList = "keyword", unique = true)})
 public class BlogSearchKeywordEntity {
     @Id

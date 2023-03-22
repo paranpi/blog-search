@@ -12,12 +12,12 @@ import java.util.List;
 @Builder
 @Getter
 public class BlogSearchResponseDto {
-    private BlogSearchResultMeta meta;
+    private BlogSearchMetaResponseDto meta;
     private List<BlogSearchItemResponseDto> dataList;
 
     public static BlogSearchResponseDto of(BlogSearchResult result) {
         BlogSearchResultMeta resultMeta = result.getMeta();
-        BlogSearchResultMeta meta = BlogSearchResultMeta.builder()
+        BlogSearchMetaResponseDto meta = BlogSearchMetaResponseDto.builder()
                 .totalCount(resultMeta.getTotalCount())
                 .pageCount(resultMeta.getPageCount())
                 .build();

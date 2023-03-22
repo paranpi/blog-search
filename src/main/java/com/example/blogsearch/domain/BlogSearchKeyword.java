@@ -7,7 +7,6 @@ import lombok.Getter;
 @Builder
 public class BlogSearchKeyword {
     private Long id;
-    //TODO: Validate
     private String keyword;
     @Builder.Default
     private Integer count = 0;
